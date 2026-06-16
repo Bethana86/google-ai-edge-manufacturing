@@ -1,6 +1,6 @@
-# APEX-EDGE // Google AI Edge Manufacturing Gateway
+# Google AI Edge Manufacturing Gateway
 
-APEX-EDGE is a premium-grade, offline-first Industrial Internet of Things (IIoT) control dashboard designed for high-speed manufacturing assembly lines. It leverages Google's advanced Edge AI hardware and software developer ecosystem to automate visual inspection, analyze defects in natural language, and assist operators with local maintenance diagnostics.
+The Google AI Edge Manufacturing Gateway is a premium-grade, offline-first Industrial Internet of Things (IIoT) control dashboard designed for high-speed manufacturing assembly lines. It leverages Google's advanced Edge AI hardware and software developer ecosystem to automate visual inspection, analyze defects in natural language, and assist operators with local maintenance diagnostics.
 
 ---
 

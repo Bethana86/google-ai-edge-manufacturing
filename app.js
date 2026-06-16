@@ -1,4 +1,4 @@
-// APEX-EDGE Google AI Edge Manufacturing Gateway Controller Code
+// Google AI Edge Manufacturing Gateway Controller Code
 
 // 1. STATE MANAGEMENT
 const state = {
