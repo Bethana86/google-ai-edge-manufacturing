@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX-EDGE // Google AI Edge Manufacturing Gateway</title>
+  <!-- Google Fonts for futuristic, industrial feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-icon"></div>
+      <div class="logo-text">
+        <span class="logo-main">APEX-EDGE // GOOGLE AI</span>
+        <span class="logo-sub">CORAL EDGE AUDIT GATEWAY</span>
+      </div>
+    </div>
+    
+    <div class="system-status-pill">
+      <span class="status-indicator-dot pulsing-green"></span>
+      <span class="status-text">SYSTEM SECURE // ACTIVE</span>
+    </div>
+
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">GATEWAY IP:</span>
+        <span class="meta-val">192.168.1.15</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">TIME (UTC):</span>
+        <span class="meta-val" id="system-time">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Navigation Sidebar -->
+    <aside class="sidebar">
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="9" rx="1" />
+            <rect x="14" y="3" width="7" height="5" rx="1" />
+            <rect x="14" y="12" width="7" height="9" rx="1" />
+            <rect x="3" y="16" width="7" height="5" rx="1" />
+          </svg>
+          <span>System Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="vision">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+            <circle cx="12" cy="13" r="4" />
+          </svg>
+          <span>Edge Vision Feed</span>
+        </button>
+        <button class="nav-item" data-tab="copilot">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span>Gemma Copilot</span>
+        </button>
+        <button class="nav-item" data-tab="nodes">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+            <line x1="6" y1="6" x2="6.01" y2="6" />
+            <line x1="6" y1="18" x2="6.01" y2="18" />
+          </svg>
+          <span>Edge Nodes Grid</span>
+        </button>
+        <button class="nav-item" data-tab="ota">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 16 12 12 8 16" />
+            <line x1="12" y1="12" x2="12" y2="21" />
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+            <polyline points="16 16 12 12 8 16" />
+          </svg>
+          <span>Vertex AI OTA Sync</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="oee-gauge-container">
+          <div class="gauge-title">LINE 1 OVERALL OEE</div>
+          <div class="gauge-value" id="global-oee">89.2%</div>
+          <div class="gauge-bar-outer">
+            <div class="gauge-bar-inner" style="width: 89.2%"></div>
+          </div>
+        </div>
+        
+        <div class="emergency-action-panel">
+          <button class="btn btn-danger btn-block" id="emergency-halt-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            LINE FORCE HALT
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Work Area -->
+    <main class="main-content">
+      
+      <!-- TAB: DASHBOARD -->
+      <section class="tab-content active" id="tab-dashboard">
+        <!-- Top Metrics Row -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">DAILY PRODUCTION</span>
+              <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="metric-value" id="metric-throughput">14,230</div>
+            <div class="metric-trend up">+4.8% from target</div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">QUALITY INDEX (DEFECTS)</span>
+              <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              </svg>
+            </div>
+            <div class="metric-value" id="metric-defect-rate">1.24%</div>
+            <div class="metric-trend down">-0.32% this hour</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">EDGE INFERENCE RATE</span>
+              <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+            <div class="metric-value" id="metric-inference-fps">29.8 <span class="unit">FPS</span></div>
+            <div class="metric-trend stable">0.2ms mean latency</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">CORAL / RPi INFRA</span>
+              <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+            </div>
+            <div class="metric-value" id="metric-active-nodes">3 / 3</div>
+            <div class="metric-trend safe">All accelerators active</div>
+          </div>
+        </div>
+
+        <!-- Dashboard Central Section -->
+        <div class="dashboard-grid">
+          <!-- Left: Telemetry Canvas Plots -->
+          <div class="card card-wide">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2 class="card-title">Google AI Edge Telemetry</h2>
+                <p class="card-subtitle">Real-time Accelerator Load, Thermal Profile & Board Vibration</p>
+              </div>
+              <div class="telemetry-controls">
+                <select id="telemetry-node-selector" class="form-control">
+                  <option value="node101">Edge Node 101 - PaliGemma VLM Inspector</option>
+                  <option value="node102">Edge Node 102 - MediaPipe Coral Detector</option>
+                  <option value="node103">Edge Node 103 - Gemma-2B Local Assistant</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="canvas-chart-container">
+                <canvas id="telemetry-canvas" width="700" height="280"></canvas>
+              </div>
+              <div class="telemetry-legends">
+                <div class="legend-item"><span class="legend-dot cpu"></span> TPU/CPU Load (%)</div>
+                <div class="legend-item"><span class="legend-dot temp"></span> Thermal (°C)</div>
+                <div class="legend-item"><span class="legend-dot vibration"></span> Vibration (G-RMS x10)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Recent Alerts log -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2 class="card-title">Active Gateway Alerts</h2>
+                <p class="card-subtitle">Real-time edge triggers and state transitions</p>
+              </div>
+              <span class="badge badge-warning" id="alert-count">0 Alerts</span>
+            </div>
+            <div class="card-body scrollable-container">
+              <div class="alerts-log" id="alerts-log-container">
+                <!-- Alerts are dynamically injected here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: DEFECT DETECTION FEED -->
+      <section class="tab-content" id="tab-vision">
+        <div class="vision-grid">
+          <!-- Video Feed Block -->
+          <div class="card card-vision-main">
+            <div class="card-header vision-header">
+              <div class="card-title-group">
+                <h2 class="card-title">Live Edge Machine Vision</h2>
+                <p class="card-subtitle" id="selected-vision-pipeline">PIPELINE: PaliGemma-3B // 192.168.1.101</p>
+              </div>
+              <div class="camera-status">
+                <span class="status-indicator-dot pulsing-green"></span>
+                <span class="camera-fps-text">60.0 FPS // 1080p</span>
+              </div>
+            </div>
+            <div class="card-body feed-body">
+              <!-- Machine Vision Canvas Simulation -->
+              <div class="vision-canvas-wrapper">
+                <canvas id="vision-canvas" width="850" height="400"></canvas>
+                <!-- UI overlays for sci-fi edge vibe -->
+                <div class="vision-scan-overlay"></div>
+                <div class="vision-crosshairs"></div>
+              </div>
+            </div>
+
+            <!-- PaliGemma text output description panel -->
+            <div class="paligemma-desc-box">
+              <div class="paligemma-desc-header">
+                <div class="g-pill-group">
+                  <span class="g-logo">G</span>
+                  <span class="g-pill-title">PaliGemma-3B // Visual LLM</span>
+                </div>
+                <span class="paligemma-latency">Latency: 84ms</span>
+              </div>
+              <div class="paligemma-desc-body" id="paligemma-description">
+                Scanning belt feed... Waiting for anomaly triggers.
+              </div>
+            </div>
+
+            <div class="card-footer vision-stats-bar">
+              <div class="stat-element">
+                <span class="stat-label">Inference Latency:</span>
+                <span class="stat-val text-cyan" id="inference-latency">8.4 ms</span>
+              </div>
+              <div class="stat-element">
+                <span class="stat-label">Belt Speed:</span>
+                <span class="stat-val" id="conveyor-speed-val">1.2 m/s</span>
+              </div>
+              <div class="stat-element">
+                <span class="stat-label">Detection Confidence:</span>
+                <span class="stat-val text-green" id="avg-confidence">96.8%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Feed Sidebar Controls -->
+          <div class="card card-vision-controls">
+            <div class="card-header">
+              <h2 class="card-title">Vision Pipeline Controls</h2>
+            </div>
+            <div class="card-body">
+              <div class="control-group">
+                <label class="control-label" for="vision-node-select">Target Camera Node</label>
+                <select id="vision-node-select" class="form-control">
+                  <option value="node101">Edge Node 101 - PaliGemma VLM Inspector</option>
+                  <option value="node102">Edge Node 102 - MediaPipe Coral Detector</option>
+                  <option value="node103">Edge Node 103 - Gemma-2B Local Assistant</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label">Inference Confidence Cutoff</label>
+                <div class="slider-container">
+                  <input type="range" id="confidence-threshold" class="slider" min="50" max="99" value="85">
+                  <span class="slider-bubble" id="confidence-threshold-val">85%</span>
+                </div>
+                <span class="control-help">Filter out predictions below this threshold</span>
+              </div>
+
+              <hr class="divider">
+
+              <div class="control-group">
+                <label class="control-label">Conveyor Simulation Speed</label>
+                <div class="slider-container">
+                  <input type="range" id="conveyor-speed" class="slider" min="0" max="4" step="0.2" value="1.2">
+                </div>
+              </div>
+
+              <hr class="divider">
+
+              <div class="control-group">
+                <label class="control-label">Feature Overlays</label>
+                <div class="toggle-list">
+                  <label class="toggle-item">
+                    <input type="checkbox" id="toggle-bboxes" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Render Bounding Boxes</span>
+                  </label>
+                  
+                  <label class="toggle-item">
+                    <input type="checkbox" id="toggle-scanlines" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Active Scanner Laser</span>
+                  </label>
+
+                  <label class="toggle-item">
+                    <input type="checkbox" id="toggle-defects-only">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Filter Anomaly Items Only</span>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="divider">
+
+              <div class="action-buttons">
+                <button class="btn btn-secondary btn-block" id="trigger-simulated-defect">
+                  Force Simulate Defect (Fail Part)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: GEMMA COPILOT CHAT -->
+      <section class="tab-content" id="tab-copilot">
+        <div class="ota-layout">
+          <!-- Left: Chat history panel -->
+          <div class="card card-terminal">
+            <div class="card-header ota-terminal-header">
+              <div class="card-title-group">
+                <h2 class="card-title">Gemma Edge Assistant</h2>
+                <p class="card-subtitle">Local quantized Gemma-2B model answering manufacturing diagnostic questions</p>
+              </div>
+              <button class="btn btn-outline-secondary btn-sm" id="clear-chat-btn">Reset Conversation</button>
+            </div>
+            <div class="card-body chat-body" style="display: flex; flex-direction: column; height: 350px;">
+              <div class="chat-history-container" id="gemma-chat-history" style="flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 14px;">
+                <!-- Chat messages injected here -->
+              </div>
+              
+              <form id="gemma-chat-form" style="border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; gap: 10px;">
+                <input type="text" id="gemma-chat-input" class="form-control" style="flex: 1;" placeholder="Ask Gemma about line diagnostics or safety protocols...">
+                <button type="submit" class="btn btn-primary" id="gemma-send-btn">
+                  Query
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right: System Info panel -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Model Specifications</h2>
+              <p class="card-subtitle">Hardware mapping and localized inference metrics</p>
+            </div>
+            <div class="card-body">
+              <div class="model-meta-info" style="margin-top: 0;">
+                <div class="meta-section-title">Local LLM Profile</div>
+                <div class="meta-pair"><span class="meta-k">Engine:</span> <span class="meta-v text-cyan">MediaPipe LLM Inference API</span></div>
+                <div class="meta-pair"><span class="meta-k">Base Model:</span> <span class="meta-v">Gemma-2B-Instruct</span></div>
+                <div class="meta-pair"><span class="meta-k">Quantization:</span> <span class="meta-v">4-bit (INT4 quantized weights)</span></div>
+                <div class="meta-pair"><span class="meta-k">Compute Location:</span> <span class="meta-v">Local Gateway CPU + Coral Edge TPU</span></div>
+                <div class="meta-pair"><span class="meta-k">Inference Latency:</span> <span class="meta-v">~18 tokens/sec</span></div>
+              </div>
+
+              <div class="model-meta-info" style="margin-top: 16px;">
+                <div class="meta-section-title">Diagnostic Quick Prompts</div>
+                <div class="quick-prompts-list">
+                  <button class="btn btn-secondary btn-sm quick-prompt-btn" style="margin-bottom: 8px; width: 100%; justify-content: flex-start; text-align: left; text-transform: none;">"How do I fix a weld void warning on Node 101?"</button>
+                  <button class="btn btn-secondary btn-sm quick-prompt-btn" style="margin-bottom: 8px; width: 100%; justify-content: flex-start; text-align: left; text-transform: none;">"Explain OEE and how to optimize conveyor belt speed."</button>
+                  <button class="btn btn-secondary btn-sm quick-prompt-btn" style="width: 100%; justify-content: flex-start; text-align: left; text-transform: none;">"Why is Node 103 CPU running at 88% capacity?"</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: EDGE NODES GRID -->
+      <section class="tab-content" id="tab-nodes">
+        <div class="nodes-tab-header">
+          <div class="header-desc">
+            <h2 class="page-title">Edge Infrastructure Topology</h2>
+            <p class="page-subtitle">Inspect compute nodes, hardware telemetry and running neural pipeline version</p>
+          </div>
+          <button class="btn btn-secondary" id="refresh-nodes-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+            </svg>
+            Scan Edge Network
+          </button>
+        </div>
+
+        <div class="nodes-grid" id="nodes-grid-container">
+          <!-- Dynamic node cards injected by app.js -->
+        </div>
+
+        <!-- Node detail drawer style element -->
+        <div class="card node-details-card" id="node-details-drawer" style="display: none;">
+          <div class="card-header">
+            <h2 class="card-title" id="drawer-node-name">Node Specs Details</h2>
+            <button class="close-btn" id="close-drawer-btn">&times;</button>
+          </div>
+          <div class="card-body">
+            <div class="specs-grid">
+              <div class="spec-item"><span class="spec-label">Model Pipeline:</span><span class="spec-value" id="drawer-model"></span></div>
+              <div class="spec-item"><span class="spec-label">Hardware Base:</span><span class="spec-value" id="drawer-hw"></span></div>
+              <div class="spec-item"><span class="spec-label">Node IP:</span><span class="spec-value" id="drawer-ip"></span></div>
+              <div class="spec-item"><span class="spec-label">Uptime:</span><span class="spec-value" id="drawer-uptime"></span></div>
+              <div class="spec-item"><span class="spec-label">Thermal Limits:</span><span class="spec-value">Critical at 85°C</span></div>
+              <div class="spec-item"><span class="spec-label">Memory Utilization:</span><span class="spec-value" id="drawer-mem"></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: OTA MODEL DEPLOYER -->
+      <section class="tab-content" id="tab-ota">
+        <div class="ota-layout">
+          <!-- Left: Deploy configuration -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Vertex AI Edge OTA Deployer</h2>
+              <p class="card-subtitle">Deploy neural network weight models & firmware patches via Vertex Model Registry</p>
+            </div>
+            <div class="card-body">
+              <form id="ota-deploy-form">
+                <div class="control-group">
+                  <label class="control-label">1. Select Target Edge Nodes</label>
+                  <div class="node-multiselect">
+                    <label class="checkbox-item">
+                      <input type="checkbox" value="node101" checked>
+                      <span class="checkbox-label">Edge Node 101 - PaliGemma VLM Inspector</span>
+                    </label>
+                    <label class="checkbox-item">
+                      <input type="checkbox" value="node102">
+                      <span class="checkbox-label">Edge Node 102 - MediaPipe Coral Detector</span>
+                    </label>
+                    <label class="checkbox-item">
+                      <input type="checkbox" value="node103">
+                      <span class="checkbox-label">Edge Node 103 - Gemma-2B Local Assistant</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="ota-model-select">2. Select Vertex Registry Artifact</label>
+                  <select id="ota-model-select" class="form-control">
+                    <option value="paligemma-3b-pt-f16">PaliGemma-3B-Defect-v2.2.0 (PyTorch Float16 Weights)</option>
+                    <option value="bearing-mediapipe-tflite">VibrationAnomaly-MediaPipe-v1.4.1 (TFLite Quantized)</option>
+                    <option value="gemma-2b-it-int4">Gemma-2B-Instruct-v3.0.2 (INT4 Quantized Binaries)</option>
+                    <option value="coral-firmware-patch">Coral-TPU-Firmware-v3.1.2 (PCIe Platform Driver Patch)</option>
+                  </select>
+                </div>
+
+                <div class="model-meta-info" id="ota-model-meta">
+                  <div class="meta-section-title">Deployment Artifact Specs</div>
+                  <div class="meta-pair"><span class="meta-k">Artifact Name:</span> <span class="meta-v" id="ota-meta-name">paligemma-3b-defect-v220.tflite</span></div>
+                  <div class="meta-pair"><span class="meta-k">Size:</span> <span class="meta-v" id="ota-meta-size">5.8 GB</span></div>
+                  <div class="meta-pair"><span class="meta-k">Precision:</span> <span class="meta-v" id="ota-meta-precision">FP16 (Quantized for Edge TPU DLA)</span></div>
+                  <div class="meta-pair"><span class="meta-k">Estimated Downtime:</span> <span class="meta-v" id="ota-meta-downtime">&lt; 3.0 seconds</span></div>
+                </div>
+
+                <div class="deploy-actions">
+                  <button type="button" class="btn btn-primary btn-block" id="start-ota-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg>
+                    PULL FROM VERTEX REGISTRY & OVER-THE-AIR FLASH
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right: Terminal Live Feed -->
+          <div class="card card-terminal">
+            <div class="card-header ota-terminal-header">
+              <div class="card-title-group">
+                <h2 class="card-title">OTA Broadcast Deployment Log</h2>
+                <p class="card-subtitle">Gateway-to-node firmware synchronization terminal</p>
+              </div>
+              <button class="btn btn-outline-secondary btn-sm" id="clear-terminal-btn">Clear Logs</button>
+            </div>
+            <div class="card-body terminal-body">
+              <div class="terminal-screen" id="ota-terminal-screen">
+                <div class="term-line system-line">[SYSTEM] APEX Vertex AI Bridge active. Waiting for deploy command...</div>
+              </div>
+            </div>
+            <div class="card-footer terminal-footer">
+              <span class="status-indicator-dot green"></span>
+              <span class="ota-status-label" id="ota-overall-status">Status: Idle</span>
+              <div class="progress-bar-container" style="display: none;" id="ota-progress-bar-container">
+                <div class="progress-bar-fill" id="ota-progress-bar-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
